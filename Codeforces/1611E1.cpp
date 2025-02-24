@@ -1,6 +1,7 @@
 
 /*
     Code by: KoKoDuDu
+    Created: 17.02.2025 14:12:50
     Link: https://codeforces.com/problemset/problem/1611/E1
 */
 #include <bits/stdc++.h>
