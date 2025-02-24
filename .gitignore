@@ -31,6 +31,6 @@
 *.out
 *.app
 
-.vscode
-.prob
-.cph
+*.vscode
+*.prob
+*.cph
