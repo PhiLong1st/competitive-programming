@@ -1,7 +1,7 @@
 
 /*
     Code by: KoKoDuDu
-    Created: 03.02.2025 09:15:56
+    Link: https://codeforces.com/problemset/problem/276/D
 */
 #include <bits/stdc++.h>
 
@@ -11,7 +11,6 @@ using namespace std;
 #define pll pair<int, int>
 
 const int MOD = 1e9 + 7;
-
 void solve()
 {
     int a, b;
@@ -51,6 +50,7 @@ int32_t main()
     cin.tie(0);
     cout.tie(0);
     int t = 1;
+    cin >> t;
     while (t--)
     {
         solve();
