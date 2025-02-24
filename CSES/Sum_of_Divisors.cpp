@@ -1,6 +1,6 @@
 /*
     Code by: KoKoDuDu
-    Created: 31.10.2024 07:22:24
+    Link: https://cses.fi/problemset/task/1082
 */
 #include <bits/stdc++.h>
 

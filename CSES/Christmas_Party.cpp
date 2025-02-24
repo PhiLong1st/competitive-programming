@@ -1,7 +1,7 @@
 
 /*
     Code by: KoKoDuDu
-    Created: 27.11.2024 14:08:28
+    Link: https://cses.fi/problemset/task/1717
 */
 #include <bits/stdc++.h>
 
