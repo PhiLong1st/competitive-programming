@@ -1,8 +1,10 @@
+
 /*
     Code by: KoKoDuDu
-    link: https://cses.fi/problemset/task/1079
+    Created: 27.11.2024 14:08:28
 */
 #include <bits/stdc++.h>
+
 using namespace std;
 
 #define int long long
@@ -31,30 +33,38 @@ struct Combinatorics {
         if (n < 0 || k < 0 || n < k) return 0;
         return fact[n] * fact_inv[k] % MOD * fact_inv[n - k] % MOD;
     }
+    int get_inv_fact(int i) {
+        return fact_inv[i];
+    }
+    int get_fact(int i) {
+        return fact[i];
+    }
+    int get_inv(int i) {
+        return inv[i];
+    }
 };
 
 void solve() {
-    int q;
-    cin >> q;
-
-    Combinatorics combinatorics(1000000, MOD);
-
-    while (q--) {
-        int n, k;
-        cin >> n >> k;
-        cout << combinatorics.get_nCk(n, k) << '\n';
+    int n;
+    cin >> n;
+    Combinatorics comb(1000000, MOD);
+    int ans = comb.get_fact(n);
+    int rem = 0;
+    for (int i = 1; i <= n; ++i) {
+        if (i % 2) rem += comb.get_nCk(n, i) * comb.get_fact(n - i) % MOD;
+        else rem -= comb.get_nCk(n, i) * comb.get_fact(n - i) % MOD + MOD;
+        rem %= MOD;
     }
+    cout << (ans - rem + MOD) % MOD;
 }
 
 int32_t main() {
     ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-
+    cin.tie(0);
+    cout.tie(0);
     int t = 1;
     while (t--) {
         solve();
     }
-
     return 0;
 }

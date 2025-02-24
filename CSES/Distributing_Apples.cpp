@@ -1,8 +1,10 @@
+
 /*
     Code by: KoKoDuDu
-    link: https://cses.fi/problemset/task/1079
+    Created: 27.11.2024 13:41:59
 */
 #include <bits/stdc++.h>
+
 using namespace std;
 
 #define int long long
@@ -31,30 +33,36 @@ struct Combinatorics {
         if (n < 0 || k < 0 || n < k) return 0;
         return fact[n] * fact_inv[k] % MOD * fact_inv[n - k] % MOD;
     }
+    int get_inv_fact(int i) {
+        return fact_inv[i];
+    }
+    int get_fact(int i) {
+        return fact[i];
+    }
+    int get_inv(int i) {
+        return inv[i];
+    }
 };
 
 void solve() {
-    int q;
-    cin >> q;
-
-    Combinatorics combinatorics(1000000, MOD);
-
-    while (q--) {
-        int n, k;
-        cin >> n >> k;
-        cout << combinatorics.get_nCk(n, k) << '\n';
+    int n, m;
+    cin >> n >> m;
+    int ans = 0;
+    Combinatorics comb(1000000, MOD);
+    for (int i = 1; i <= n; ++i) {
+        ans += comb.get_nCk(n, i) * comb.get_nCk(m - 1, i - 1) % MOD;
+        ans %= MOD;
     }
+    cout << ans;
 }
 
 int32_t main() {
     ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-
+    cin.tie(0);
+    cout.tie(0);
     int t = 1;
     while (t--) {
         solve();
     }
-
     return 0;
 }

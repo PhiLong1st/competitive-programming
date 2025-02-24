@@ -1,15 +1,16 @@
+
 /*
     Code by: KoKoDuDu
-    link: https://cses.fi/problemset/task/1079
+    Created: 27.11.2024 12:33:05
 */
 #include <bits/stdc++.h>
+
 using namespace std;
 
 #define int long long
 #define pll pair<int, int>
 
 const int MOD = 1e9 + 7;
-
 struct Combinatorics {
     int n, MOD;
     vector<int> fact, inv, fact_inv;
@@ -31,30 +32,40 @@ struct Combinatorics {
         if (n < 0 || k < 0 || n < k) return 0;
         return fact[n] * fact_inv[k] % MOD * fact_inv[n - k] % MOD;
     }
+    int get_inv_fact(int i) {
+        return fact_inv[i];
+    }
+    int get_fact(int i) {
+        return fact[i];
+    }
+    int get_inv(int i) {
+        return inv[i];
+    }
 };
 
 void solve() {
-    int q;
-    cin >> q;
-
-    Combinatorics combinatorics(1000000, MOD);
-
-    while (q--) {
-        int n, k;
-        cin >> n >> k;
-        cout << combinatorics.get_nCk(n, k) << '\n';
+    string s;
+    cin >> s;
+    int n = s.size();
+    vector<int>cnt(26, 0);
+    Combinatorics comb(1000000, MOD);
+    for (int i = 0; i < n; ++i) {
+        cnt[s[i] - 'a']++;
     }
+    int ans = comb.get_fact(n);
+    for (int i = 0; i < 26; ++i) {
+        ans = ans * comb.get_inv_fact(cnt[i]) % MOD;
+    }
+    cout << ans;
 }
 
 int32_t main() {
     ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-
+    cin.tie(0);
+    cout.tie(0);
     int t = 1;
     while (t--) {
         solve();
     }
-
     return 0;
 }
