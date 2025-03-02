@@ -1,4 +1,5 @@
 -- Link: https://leetcode.com/problems/average-selling-price/
+-- Sol 1
 SELECT tb.product_id, 
        COALESCE(ROUND(CAST(tb.a AS FLOAT) / NULLIF(CAST(tb.b AS FLOAT), 0), 2), 0) AS average_price
 FROM (
@@ -17,3 +18,16 @@ FROM (
     ) AS t
     GROUP BY t.product_id
 ) AS tb;
+-- Sol 2
+-- SELECT
+--     p.product_id,
+--     COALESCE(ROUND(CAST(SUM(p.price * u.units) AS FLOAT) / NULLIF(CAST(SUM(u.units) AS FLOAT), 0), 2), 0) AS average_price
+-- FROM
+--     Prices AS p
+-- LEFT JOIN
+--     UnitsSold AS u
+-- ON
+--     p.product_id = u.product_id
+--     AND u.purchase_date BETWEEN p.start_date AND p.end_date
+-- GROUP BY
+--     p.product_id;
