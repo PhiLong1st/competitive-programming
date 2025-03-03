@@ -1,49 +1,11 @@
-<div id="a"></div>
-<div id="b"></div>
-<div id="c"></div>
-<div id="d"></div>
-
-<style>
-    body {
-        margin: 0;
-        background: #6592cf;
-        display: grid;
-        place-items: center;
-    }
-
-    #a {
-        position: absolute;
-        width: 140;
-        height: 190;
-        background: #060f55;
-        border-radius: 0 0 100px 100px;
-        margin-top: 10;
-    }
-
-    #b {
-        width: 20;
-        height: 100;
-        background: #6592CF;
-        z-index: 1;
-        border-radius: 0 0 100px 100px;
-        margin: 20 0 0 0;
-        box-shadow: -40px 0 0 #6592CF, 40px 0 0 #6592CF;
-    }
-
-    #c {
-        width: 20;
-        height: 20;
-        background: #060F55;
-        border-radius: 10px;
-        transform: translate(-60px, -190px);
-        box-shadow: 40px 0 0 #060F55, 80px 0 0 #060F55, 120px 0 0 #060F55;
-    }
-
-    #d {
-        position: absolute;
-        bottom: 0;
-        width: 20;
-        height: 60;
-        background: #060F55;
-    }
-</style>
+💡 This will be displayed as:
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My GitHub Page</title>
+  </head>
+  <body>
+    <h1>Hello, GitHub!</h1>
+  </body>
+</html>
