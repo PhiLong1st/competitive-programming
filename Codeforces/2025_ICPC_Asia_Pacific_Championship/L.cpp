@@ -39,29 +39,8 @@ void solve() {
         if (a[x][y + 1] != 0 && a[x][y + 1] + i <= n) {
             st.insert({ p, a[x][y + 1] + i });
         }
-        // for (auto x : st) {
-        //     cout << x.first << ' ' << x.second << '\n';
-        // }
-        // cout << x << ' ' << y << '\n';
-        // cout << "---\n";
-        // for (int j = 1; j <= n; ++j) {
-        //     if (abs(save[p].first - save[j].first) + abs(save[p].second - save[j].second) == 1) {
-        //         st.insert({ p,j });
-        //         // cerr << p << ' ' << j << '\n';
-        //     }
-        // }
-        // for (int j = n; j >= 1; --j) {
-        //     save[j] = save[j - 1];
-        // }
-        // cout << i << '\n';
-        // for (int j = 1; j <= n; ++j) {
-        //     cout << save[j].first << ' ' << save[j].second << '\n';
-        // }
         save[p] = save[p - i - 1];
     }
-    // for (auto x : st) {
-    //     cout << x.first << ' ' << x.second << '\n';
-    // }
     cout << st.size() << "/" << n - 1;
 }
 
