@@ -1,0 +1,43 @@
+<div class="column">
+    <div class="circle"></div>
+</div>
+<div class="column">
+    <div class="circle"></div>
+</div>
+<div class="column">
+    <div class="circle"></div>
+</div>
+
+<style>
+    body {
+        margin: 0px;
+        padding: 50px 0px 0px 50px;
+        font-size: 0;
+        background: #62306D;
+    }
+
+    .column {
+        width: 100px;
+        height: 150px;
+        display: inline-block;
+        background: #F7EC7D;
+        border-radius: 50px 50px 0 0;
+    }
+
+    .column:nth-child(2) {
+        height: 250px;
+    }
+
+    .circle {
+        width: 60px;
+        height: 60px;
+        border: 20px solid #AA445F;
+        background: #E38F66;
+        border-radius: 50%;
+    }
+
+    .column:nth-child(2) .circle {
+        background: #AA445F;
+        border-color: #E38F66;
+    }
+</style>
