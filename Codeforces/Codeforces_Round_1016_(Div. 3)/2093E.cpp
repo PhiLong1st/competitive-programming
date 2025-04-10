@@ -20,25 +20,23 @@ void solve() {
     }
 
     int l = 0, r = n + 1, ans = 0;
+
     while (l <= r)
     {
         int mid = (l + r) / 2;
-        // mid = 3;
-        // cout << mid << "\n";
-        map<int, int> save;
         int cnt = 1, cur = 0;
+        vector<int> save(mid + 1, 0);
 
         for (int i = 1; i <= n; ++i) {
-            if (save[a[i]] != cnt) {
+            if (a[i] < mid && save[a[i]] != cnt) {
                 save[a[i]] = cnt;
-                cur += a[i] < mid;
+                cur++;
             }
 
             if (cur == mid) {
                 cnt++;
                 cur = 0;
             }
-            // cout << "i: " << i << " cur: " << cur << " cnt: " << cnt << "\n";
         }
 
         if (cnt > k) {
