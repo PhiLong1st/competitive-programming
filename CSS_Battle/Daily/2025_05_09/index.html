@@ -1,0 +1,44 @@
+<div class="wrapper">
+  <div class="seg"></div>
+  <div class="seg"></div>
+  <div class="seg hor"></div>
+  <div class="cyc"></div>
+</div>
+<style>
+  body {
+    background: #4f77ff;
+    margin: 0;
+  }
+  .wrapper {
+    position: relative;
+    padding: 130px;
+    padding-top: 60px;
+  }
+  .seg {
+    position: absolute;
+    width: 140px;
+    height: 20px;
+    background: #ffffff;
+    z-index: 2;
+  }
+  .seg:nth-child(2) {
+    top: 90px;
+  }
+  .cyc {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #ffffff;
+    top: 120px;
+    left: 140px;
+  }
+  .hor {
+    top: 125px;
+    left: 165px;
+    width: 60px;
+    rotate: 90deg;
+    border: 10px solid #4f77ff;
+    border-left: none;
+  }
+</style>
