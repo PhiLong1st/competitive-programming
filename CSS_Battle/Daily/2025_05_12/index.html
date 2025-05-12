@@ -1,0 +1,40 @@
+<div class="wrapper">
+    <div class="rec"></div>
+    <div class="cyc"></div>
+</div>
+<style>
+    body {
+        background: #ED6A9D;
+        margin: 0;
+    }
+
+    .wrapper {
+        position: relative;
+    }
+
+    .rec {
+        width: 60px;
+        height: 80px;
+        position: absolute;
+        background: #30383F;
+        outline-offset: 60px;
+        outline: 60px solid #30383F;
+        top: 100px;
+        left: 170px;
+        z-index: 1;
+    }
+
+    .cyc {
+        box-sizing: border-box;
+        width: 400px;
+        height: 200px;
+        position: absolute;
+        background: #30383F;
+        border: 110px solid #ED6A9D;
+        border-bottom: none;
+        border-radius: 400px 400px 0 0;
+        top: -100px;
+        left: 0px;
+        z-index: 2;
+    }
+</style>
