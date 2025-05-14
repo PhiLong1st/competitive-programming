@@ -1,0 +1,57 @@
+<div class="wrapper">
+    <div class="a"></div>
+    <div class="b l"></div>
+    <div class="b r"></div>
+    <div class="tri"> </div>
+</div>
+<style>
+    body {
+        margin: 0;
+        background: #243D83;
+    }
+
+    .wrapper {
+        position: relative;
+    }
+
+    .a {
+        width: 160px;
+        height: 160px;
+        background: #5AA4B7;
+        border-radius: 0 0 80px 80px;
+        left: 120;
+        top: 110;
+        position: absolute;
+    }
+
+    .b {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #243D83;
+        position: absolute;
+        z-index: 3;
+
+    }
+
+    .l {
+        left: 80;
+        top: 110;
+    }
+
+    .r {
+        left: 240;
+        top: 110;
+    }
+
+    .tri {
+        width: 120px;
+        height: 120px;
+        background: #5AA4B7;
+        position: absolute;
+        rotate: 45deg;
+        top: 55;
+        left: 140;
+        z-index: 1;
+    }
+</style>
