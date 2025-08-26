@@ -11,60 +11,62 @@ const int kMod = 1e9 + 7;
 const int kInf = 1e18;
 
 void solve() {
-  int num_cars, num_station, road_length, start_time;
-  cin >> num_cars >> num_station >> road_length >> start_time;
+  int num_cars, num_stops, road_length, start_time;
+  cin >> num_cars >> num_stops >> road_length >> start_time;
 
   vector<array<int, 2>> cars(num_cars + 1);
-  vector<int> stations(num_station + 1);
+  vector<int> stops(num_stops + 1);
 
   for (int i = 1; i <= num_cars; ++i) {
     cin >> cars[i][0] >> cars[i][1];
   }
 
-  for (int i = 1; i <= num_station; ++i) {
-    cin >> stations[i];
+  for (int i = 1; i <= num_stops; ++i) {
+    cin >> stops[i];
   }
 
-  stations.push_back(road_length);
-  sort(stations.begin() + 1, stations.end());
+  stops.push_back(road_length);
+  sort(stops.begin() + 1, stops.end());
 
-  int l = 1, r = 1e9, min_fuel = -1;
+  auto is_feasible_fuel = [&](int fuel) {
+    int total_time = 0;
 
+    for (int i = 1; i < stops.size(); ++i) {
+      int dist = stops[i] - stops[i - 1];
+      if (dist > fuel) {
+        return false;
+      }
+      total_time += 2 * dist - min(dist, fuel - dist);
+    }
+    return total_time <= start_time;
+  };
+
+  int l = 1, r = 1e9, minimum_fuel = -1;
   while (l <= r) {
     int mid = (l + r) >> 1;
-    int total = 0;
-    bool ok = true;
-    for (int i = 1; i < stations.size(); ++i) {
-      int dist = stations[i] - stations[i - 1];
-      if (dist > mid) {
-        ok = false;
-        break;
-      }
-      total += 2 * dist - min(dist, mid - dist);
-    }
-    if (!ok || total > start_time) {
-      l = mid + 1;
-    } else {
+    if (is_feasible_fuel(mid)) {
       r = mid - 1;
-      min_fuel = mid;
+      minimum_fuel = mid;
+    } else {
+      l = mid + 1;
     }
   }
 
-  int ans = kInf;
-  if (min_fuel == -1) {
+  int minimum_cost = kInf;
+  if (minimum_fuel == -1) {
     cout << -1;
     return;
   }
 
   for (int i = 1; i <= num_cars; ++i) {
-    if (cars[i][1] < min_fuel) {
+    if (cars[i][1] < minimum_fuel) {
       continue;
     }
 
-    ans = min(ans, cars[i][0]);
+    minimum_cost = min(minimum_cost, cars[i][0]);
   }
 
-  cout << ((ans == kInf) ? -1 : ans);
+  cout << ((minimum_cost == kInf) ? -1 : minimum_cost);
 }
 
 int32_t main() {
