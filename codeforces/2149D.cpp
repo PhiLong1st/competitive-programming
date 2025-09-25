@@ -10,20 +10,6 @@ using namespace std;
 const int kMod = 1e9 + 7;
 const int kInf = 1e18;
 
-int calc(int l, int r, int mid, vector<int>& cnt, vector<int>& sum) {
-  int sum_left = sum[mid] - sum[l - 1];
-  int num_left = cnt[mid] - cnt[l - 1];
-
-  int sum_right = sum[r] - sum[mid];
-  int num_right = cnt[r] - cnt[mid];
-
-  int res_left = num_left * mid - sum_left - (num_left - 1) * num_left / 2;
-  int res_right =
-      sum_right - (mid + 1) * num_right - (num_right - 1) * num_right / 2;
-
-  return res_left + res_right;
-}
-
 void solve() {
   string s;
   int n;
@@ -33,21 +19,27 @@ void solve() {
     return void(cout << 0 << '\n');
   }
 
-  vector<int> cnt_a(n + 1), sum_a(n + 1);
-  vector<int> cnt_b(n + 1), sum_b(n + 1);
-
-  for (int i = 1; i <= n; ++i) {
-    cnt_a[i] = cnt_a[i - 1] + (s[i - 1] == 'a');
-    sum_a[i] = sum_a[i - 1] + ((s[i - 1] == 'a') ? i : 0);
-
-    cnt_b[i] = cnt_b[i - 1] + (s[i - 1] == 'b');
-    sum_b[i] = sum_b[i - 1] + ((s[i - 1] == 'b') ? i : 0);
-  }
-
   int ans = kInf;
-  for (int i = 1; i < n; ++i) {
-    ans = min(ans, calc(1, n, i, cnt_a, sum_a));
-    ans = min(ans, calc(1, n, i, cnt_b, sum_b));
+  for (auto c : {'a', 'b'}) {
+    vector<int> cnt(n + 1), sum(n + 1);
+    for (int i = 1; i <= n; ++i) {
+      cnt[i] = cnt[i - 1] + (s[i - 1] == c);
+      sum[i] = sum[i - 1] + ((s[i - 1] == c) ? i : 0);
+    }
+
+    for (int i = 1; i < n; ++i) {
+      int sum_left = sum[i];
+      int num_left = cnt[i];
+
+      int sum_right = sum[n] - sum[i];
+      int num_right = cnt[n] - cnt[i];
+
+      int res_left = (num_left * i) - sum_left - (num_left - 1) * (num_left / 2);
+      int res_right =
+          sum_right - (i + 1) * num_right - (num_right - 1) * num_right / 2;
+
+      ans = min(ans, res_left + res_right);
+    }
   }
 
   cout << ans << '\n';
