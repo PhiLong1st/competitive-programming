@@ -45,12 +45,13 @@ int32_t main() {
   cout.tie(0);
 
   vector<int> sum = get_euler_totient_sum(1000000);
+
   int t;
   cin >> t;
   while (t--) {
     int n;
     cin >> n;
-    cout << n * (sum[n] + 1) / 2 << '\n';
+    cout << n * (sum[n] / 2 + 1) << '\n';
   }
 
   return 0;
