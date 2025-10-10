@@ -44,35 +44,22 @@ vector<vector<int>> make_dp(vector<int>& arr, vector<int>& vt, bool is_right) {
 
   vector<vector<int>> dp(sz, vector<int>(n));
 
-  for (int i = 0; i < n; ++i) {
-    if (arr[i] != vt[0]) continue;
+  for (int p = 0; p < sz; ++p) {
+    if (p != 0) {
+      int sum = 0;
+      for (int i = 0; i < n; ++i) {
+        if (vt[p - 1] == arr[i]) add(sum, dp[p - 1][i]);
+        if (vt[p - 1] > arr[i]) sum = mul(sum, 2);
+        if (arr[i] != vt[p]) continue;
 
-    dp[0][i] = 1;
-
-    int cnt = 0;
-    for (int j = i - 1; j >= 0; --j) {
-      cnt += arr[i] > arr[j];
-
-      if (is_right && sz == 1) continue;
-
-      if (arr[i] == arr[j]) {
-        add(dp[0][i], mul(dp[0][j], pw2[cnt]));
+        add(dp[p][i], sum);
       }
-    }
-  }
-
-  for (int p = 1; p < sz; ++p) {
-    int sum = 0;
-    for (int i = 0; i < n; ++i) {
-      if (vt[p - 1] == arr[i]) add(sum, dp[p - 1][i]);
-      if (vt[p - 1] > arr[i]) sum = mul(sum, 2);
-      if (arr[i] != vt[p]) continue;
-
-      add(dp[p][i], sum);
     }
 
     int bonus = 0;
     for (int i = 0; i < n; ++i) {
+      dp[0][i] = 1;
+
       if (vt[p] > arr[i]) bonus = mul(bonus, 2);
       if (arr[i] != vt[p]) continue;
       if (is_right && p == sz - 1) continue;
