@@ -17,16 +17,12 @@ const int kMinInf = numeric_limits<int>::min();
 #include "debug.h"
 #endif
 
-static inline int cdiv(int a, int b) {
-  return (a >= 0) ? (a + b - 1) / b : a / b;
-}
+inline int cdiv(int a, int b) { return (a >= 0) ? (a + b - 1) / b : a / b; }
 
-static inline int fdiv(int a, int b) {
-  return (a <= 0) ? (a - b + 1) / b : a / b;
-}
+inline int fdiv(int a, int b) { return (a <= 0) ? (a - b + 1) / b : a / b; }
 
 struct Diophantine {
-  int ext_gcd(int a, int b, int &x, int &y) {
+  int ext_gcd(int a, int b, int& x, int& y) {
     if (b == 0) {
       x = 1;
       y = 0;
@@ -42,7 +38,11 @@ struct Diophantine {
     return g;
   }
 
-  bool solve_any(int a, int b, int c, int &x0, int &y0, int &g) {
+  inline int cdiv(int a, int b) { return (a >= 0) ? (a + b - 1) / b : a / b; }
+
+  inline int fdiv(int a, int b) { return (a <= 0) ? (a - b + 1) / b : a / b; }
+
+  bool try_solve_any(int a, int b, int c, int& x0, int& y0, int& g) {
     g = ext_gcd(abs(a), abs(b), x0, y0);
 
     if (c % g != 0) return false;
@@ -56,8 +56,8 @@ struct Diophantine {
     return true;
   }
 
-  bool find_range(int a, int b, int c, int minx, int maxx, int miny, int maxy,
-                  int &kL, int &kR) {
+  bool try_find_range(int a, int b, int c, int minx, int maxx, int miny,
+                      int maxy, int& kL, int& kR) {
     if (a == 0 || b == 0) return false;
 
     // a, b != 0
@@ -66,7 +66,7 @@ struct Diophantine {
     // miny <= y <= maxy -> kLy <= t <= kRy
     int x0, y0, g, kLx, kRx, kLy, kRy;
 
-    if (!solve_any(a, b, c, x0, y0, g)) return false;
+    if (!try_solve_any(a, b, c, x0, y0, g)) return false;
 
     int stepX = b / g;
     int stepY = a / g;
@@ -100,8 +100,8 @@ void solve() {
 
   Diophantine dio;
   int x0, y0, g, kL, kR;
-  bool is_ok = dio.solve_any(a, b, c, x0, y0, g);
-  is_ok = dio.find_range(a, b, c, 0, n, 0, m, kL, kR);
+  bool is_ok = dio.try_solve_any(a, b, c, x0, y0, g);
+  is_ok = dio.try_find_range(a, b, c, 0, n, 0, m, kL, kR);
 
   if (!is_ok) return void(cout << m + n << '\n');
 
@@ -120,7 +120,7 @@ void solve() {
 
   int ans = kMaxInf;
   int t = kL;
-  
+
   while (t <= kR) {
     int x = x0 + t * stepX;
     int y = y0 - t * stepY;
@@ -129,15 +129,15 @@ void solve() {
 
     int dt1 = max(1LL, cdiv((x_cap + 1) - x, stepX));
 
-    int y_floor_next = (y == 0) ? m : m / (m / y + 1);
-    int dt2 = max(1LL, cdiv(y - y_floor_next, stepY));
+    int y_floor_nxt = (y == 0) ? m : m / (m / y + 1);
+    int dt2 = max(1LL, cdiv(y - y_floor_nxt, stepY));
 
-    int next_t = min(kR + 1, t + min(dt1, dt2));
-    int pick = (stepX >= stepY) ? (next_t - 1) : t;
+    int nxt_t = min(kR + 1, t + min(dt1, dt2));
+    int pick = (stepX >= stepY) ? (nxt_t - 1) : t;
 
     ans = min(ans, f(pick));
 
-    t = next_t;
+    t = nxt_t;
   }
 
   cout << ans << '\n';
