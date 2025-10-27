@@ -12,7 +12,7 @@ const int kMaxInf = numeric_limits<int>::max();
 const int kMinInf = numeric_limits<int>::min();
 
 struct Diophantine {
-  int ext_gcd(int a, int b, int &x, int &y) {
+  int ext_gcd(int a, int b, int& x, int& y) {
     if (b == 0) {
       x = 1;
       y = 0;
@@ -28,7 +28,7 @@ struct Diophantine {
     return g;
   }
 
-  bool solve_any(int a, int b, int c, int &x0, int &y0, int &g) {
+  bool try_solve_any(int a, int b, int c, int& x0, int& y0, int& g) {
     g = ext_gcd(abs(a), abs(b), x0, y0);
 
     if (c % g != 0) return false;
@@ -46,7 +46,7 @@ struct Diophantine {
                               int maxy) {
     // x = x0 + t * stepX, y = y0 + t * stepY
     int x0, y0, g;
-    if (!solve_any(a, b, c, x0, y0, g)) return 0;
+    if (!try_solve_any(a, b, c, x0, y0, g)) return 0;
 
     int stepX = b / g;
     int stepY = a / g;
@@ -98,7 +98,7 @@ void solve() {
 
   Diophantine dio;
   int x, y;
-  bool ok = dio.solve_any(b, -a, 2, x, y, g);
+  bool ok = dio.try_solve_any(b, -a, 2, x, y, g);
 
   if (!ok) return void(cout << -1);
 
