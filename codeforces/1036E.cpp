@@ -121,15 +121,10 @@ struct Line {
     c = -(a * p.x + b * p.y);
   }
 
-  int count_integer_point() const {
+  int count_integer_point_on_segment() {
     int dx = ptA.x - ptB.x;
     int dy = ptA.y - ptB.y;
     return gcd(abs(dx), abs(dy)) + 1;
-  }
-
-  static bool in_box(int x, int l, int r) {
-    if (l > r) swap(l, r);
-    return l <= x && x <= r;
   }
 
   bool get_integer_intersect_point(Line other, Point& p) {
@@ -177,7 +172,7 @@ void solve() {
 
   int ans = 0;
   for (int i = 0; i < n; ++i) {
-    ans += a[i].count_integer_point();
+    ans += a[i].count_integer_point_on_segment();
 
     set<pii> pts;
     for (int j = 0; j < i; ++j) {
