@@ -153,3 +153,13 @@ struct Line {
     return lx <= p.x && p.x <= rx && ly <= p.y && p.y <= ry;
   }
 };
+
+int fpow(int a, int b) {
+  int res = 1;
+  while (b) {
+    if (b & 1) res = res * a % kMod;
+    a = a * a % kMod;
+    b >>= 1;
+  }
+  return res;
+}
