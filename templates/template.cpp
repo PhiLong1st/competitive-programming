@@ -1,11 +1,10 @@
 #include <bits/stdc++.h>
 #define int long long
+#define ldb long double
 #define pii pair<int, int>
 #define cd complex<double>
 #define fi first
 #define se second
-#define el '\n'
-#define problem "problem"
 
 using namespace std;
 
@@ -32,6 +31,10 @@ int minus_mod(int a, int b) { return (a - b + kMod) % kMod; }
 
 int mul_mod(int a, int b) { return a * b % kMod; }
 
+void maximize(int& x, int y) { x = max(x, y); }
+
+void minimize(int& x, int y) { x = min(x, y); }
+
 int fpow(int a, int b) {
   int res = 1;
   while (b) {
@@ -42,17 +45,17 @@ int fpow(int a, int b) {
   return res;
 }
 
+int gcd(int a, int b) {
+  if (a < b) swap(a, b);
+  return b == 0 ? a : gcd(b, a % b);
+}
+
 void solve() {}
 
 int32_t main() {
   ios_base::sync_with_stdio(false);
   cin.tie(0);
   cout.tie(0);
-
-  if (fopen(problem ".inp", "r")) {
-    freopen(problem ".inp", "r", stdin);
-    freopen(problem ".out", "w", stdout);
-  }
 
   int t = 1;
   cin >> t;
