@@ -1,6 +1,6 @@
 /*
  Code by: KoKoDuDu
- Created: 2025.11.19 10:48:21
+ Created: 2025.11.21 16:54:45
 */
 
 #include <bits/stdc++.h>
@@ -14,7 +14,7 @@
 using namespace std;
 
 const double PI = acos(-1);
-const int kMaxN = 1e6 + 0307;
+const int kMaxN = 2e5 + 0307;
 const int kMod = 1e9 + 7;
 const int kMaxBit = 60;
 const int kMaxInf = 1e18;
@@ -49,94 +49,104 @@ int gcd(int a, int b) {
   return b == 0 ? a : gcd(b, a % b);
 }
 
-int a[kMaxN];
-int max_st[4 * kMaxN];
-int st[4 * kMaxN];
-int n, q;
+struct Query {
+  int l, r, id;
+};
 
-void update_max_st(int id, int l, int r, int pos, int val) {
-  int mid = (l + r) >> 1;
+struct Segment_Tree_Max {
+  int n;
+  vector<pii> lazy;
 
-  if (l == r) {
-    max_st[id] = val;
-    return;
+  Segment_Tree_Max(int n = 0) {
+    this->n = n;
+    lazy.assign(4 * n + 5, {0, 0});
   }
 
-  if (pos <= mid) {
-    update_max_st(id * 2, l, mid, pos, val);
-  } else {
-    update_max_st(id * 2 + 1, mid + 1, r, pos, val);
+  void update(int v, int tl, int tr, int l, int r, pii f) {
+    if (l > r) return;
+
+    if (l <= tl && tr <= r) {
+      lazy[v].fi += f.fi;
+      lazy[v].se += f.se;
+      return;
+    }
+
+    int tm = (tl + tr) >> 1;
+    update(v << 1, tl, tm, l, min(r, tm), f);
+    update(v << 1 | 1, tm + 1, tr, max(l, tm + 1), r, f);
   }
 
-  int p1 = max_st[id * 2], p2 = max_st[id * 2 + 1];
-  max_st[id] = a[p1] < a[p2] ? p2 : p1;
-}
+  pii query(int v, int tl, int tr, int pos, pii val) {
+    val.fi += lazy[v].fi;
+    val.se += lazy[v].se;
 
-int get_max_st(int id, int l, int r, int u, int v) {
-  if (l > v || r < u) return 0;
-  if (u <= l && r <= v) return max_st[id];
+    if (tl == tr) return val;
 
-  int mid = (l + r) >> 1;
-  int p1 = get_max_st(id * 2, l, mid, u, v);
-  int p2 = get_max_st(id * 2 + 1, mid + 1, r, u, v);
-
-  if (p1 == 0) return p2;
-  if (p2 == 0) return p1;
-  return a[p1] < a[p2] ? p2 : p1;
-}
-
-void init(int id, int l, int r) {
-  if (l == r) {
-    st[id] = 1;
-    return;
+    int tm = (tl + tr) >> 1;
+    if (pos <= tm)
+      return query(v << 1, tl, tm, pos, val);
+    else
+      return query(v << 1 | 1, tm + 1, tr, pos, val);
   }
-  int mid = (l + r) >> 1;
-  init(id * 2, l, mid);
-  init(id * 2 + 1, mid + 1, r);
-}
 
-void build(int id, int l, int r) {
-  if (l >= r) return;
-  int mid = get_max_st(1, 1, n, l, r);
-  build(id * 2, l, mid - 1);
-  build(id * 2 + 1, mid + 1, r);
-  st[id] = st[id * 2] + st[id * 2 + 1] + 1;
-}
+  void update(int l, int r, pii f) { update(1, 0, n - 1, l, r, f); }
 
-int get(int id, int l, int r, int u, int v) {
-  if (l < 1 || l > r || l > v || r < u) return 0;
-  if (u == l && r == v) return st[id];
-
-  int mid = get_max_st(1, 1, n, l, r);
-  int p1 = get(id * 2, l, mid - 1, u, v);
-  int p2 = get(id * 2 + 1, mid + 1, r, u, v);
-  return p1 + p2 + 1;
-}
-
-int calc(int l, int r) {
-  if (l == r) return 1;
-  if (l < 1 || l > r) return 0;
-  int mid = get_max_st(1, 1, n, l, r);
-  int p1 = calc(l, mid - 1) + mid - l;
-  int p2 = calc(mid + 1, r) + r - mid;
-  return p1 + p2 + 1;
-}
+  pii query(int pos) { return query(1, 0, n - 1, pos, {0, 0}); }
+};
 
 void solve() {
+  int n, q;
   cin >> n >> q;
 
-  for (int i = 1; i <= n; ++i) {
-    cin >> a[i];
-    update_max_st(1, 1, n, i, i);
-  }
-
-  vector<int> l(q), r(q);
-  for (auto& x : l) cin >> x;
-  for (auto& x : r) cin >> x;
+  vector<int> a(n), ans(q);
+  vector<Query> qr(q);
+  for (auto& x : a) cin >> x;
+  for (auto& [l, r, id] : qr) cin >> l;
+  for (auto& [l, r, id] : qr) cin >> r;
 
   for (int i = 0; i < q; ++i) {
-    cout << l[i] << ' ' << r[i] << ' ' << calc(l[i], r[i]) << '\n';
+    qr[i].l--;
+    qr[i].r--;
+    qr[i].id = i;
   }
+
+  for (auto& [l, r, id] : qr) ans[id] = r - l + 1;
+
+  for (int t = 0; t < 2; ++t) {
+    vector<int> st, lf(n, -1);
+    for (int i = 0; i < n; ++i) {
+      while (!st.empty() && a[st.back()] < a[i]) st.pop_back();
+      if (!st.empty()) lf[i] = st.back();
+      st.push_back(i);
+    }
+
+    sort(qr.begin(), qr.end(), [&](Query& x, Query& y) -> bool {
+      if (x.r != y.r) return x.r < y.r;
+      return x.l < y.l;
+    });
+
+    Segment_Tree_Max tree(n);
+    int pos = 0;
+
+    for (int i = 0; i < n; ++i) {
+      tree.update(0, lf[i], {0, i - lf[i] - 1});
+      tree.update(lf[i] + 1, i, {-1, i});
+
+      while (pos < q && qr[pos].r == i) {
+        pii val = tree.query(qr[pos].l);
+        ans[qr[pos].id] += val.fi * qr[pos].l + val.se;
+        ++pos;
+      }
+    }
+
+    reverse(a.begin(), a.end());
+    for (auto& [l, r, id] : qr) {
+      l = n - 1 - l, r = n - 1 - r;
+      swap(l, r);
+    }
+  }
+
+  for (auto& x : ans) cout << x << ' ';
 }
 
 int32_t main() {
