@@ -1,4 +1,3 @@
-
 /*
     Code by: KoKoDuDu
     Created: 2025.04.24 23:10:15
@@ -16,9 +15,7 @@ void cal(int l, int r, int x) {
 
     int mid = (l + r) / 2;
 
-    if (a[mid] == x) {
-        return;
-    }
+    if (a[mid] == x) return;
 
     if (a[mid] < x && mid < pos[x]) {
         usedL++;
@@ -74,7 +71,6 @@ void solve() {
         }
         cout << 2 * max(lPos, rPos) << ' ';
     }
-
     cout << "\n";
 }
 
