@@ -55,44 +55,19 @@ void solve() {
   vector<int> a(n);
   for (int& x : a) cin >> x;
 
-  vector<int> valid(n);
-  iota(valid.begin(), valid.end(), 0);
+  vector<int> b(n);
+  for (int i = 0; i < n; ++i) b[i] = a[i] - i;
 
-  vector<int> gaps(n);
-  for (int i = 0; i < n; ++i) gaps[i] = valid[i] - a[i];
+  sort(b.begin(), b.end());
 
-  vector<int> neg, pos;
-  for (int i = 0; i < n; ++i) {
-    if (gaps[i] < 0) neg.push_back(abs(gaps[i]));
-    if (gaps[i] > 0) pos.push_back(gaps[i]);
-  }
+  auto f = [&](int x) -> int {
+    int cost = 0;
+    for (int i = 0; i < n; ++i) cost += abs(x + i - a[i]);
+    return cost;
+  };
 
-  int n_sz = neg.size();
-  int p_sz = pos.size();
-  int cnt_0 = n - n_sz - p_sz;
-
-  int ans = 0;
-  if (abs(n_sz - p_sz) <= cnt_0) {
-    for (int& x : gaps) ans += abs(x);
-    cout << ans;
-    return;
-  }
-
-  sort(neg.begin(), neg.end());
-  sort(pos.begin(), pos.end());
-
-  if (n_sz > p_sz + cnt_0) swap(neg, pos);
-
-  for (int i = 0; i < cnt_0; ++i) neg.push_back(0);
-  int d = (abs(n_sz - p_sz) - cnt_0 + 1) / 2;
-  int val = pos[d - 1];
-  for (int i = 0; i < pos.size(); ++i) pos[i] = abs(pos[i] - val);
-  for (int i = 0; i < neg.size(); ++i) neg[i] = abs(neg[i] + val);
-
-  ans = 0;
-  for (int& x : neg) ans += x;
-  for (int& x : pos) ans += x;
-  cout << ans;
+  int x = b[n / 2];
+  cout << f(x);
 }
 
 int32_t main() {

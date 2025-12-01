@@ -1,6 +1,6 @@
 /*
  Code by: KoKoDuDu
- Created: 2025.11.29 16:40:49
+ Created: 2025.11.29 18:32:08
 */
 
 #include <bits/stdc++.h>
@@ -24,11 +24,11 @@ int ceil_div(int a, int b) { return a >= 0 ? (a + b - 1) / b : a / b; }
 
 int floor_div(int a, int b) { return a <= 0 ? (a - b + 1) / b : a / b; }
 
-int add_mod(int a, int b) { return a + b >= kMod ? a + b - kMod : a + b; }
+void add_mod(int& a, int b) { a = a + b >= kMod ? a + b - kMod : a + b; }
 
-int minus_mod(int a, int b) { return (a - b + kMod) % kMod; }
+void minus_mod(int& a, int b) { a = (a - b + kMod) % kMod; }
 
-int mul_mod(int a, int b) { return a * b % kMod; }
+void mul_mod(int& a, int b) { a = a * b % kMod; }
 
 void maximize(int& x, int y) { x = max(x, y); }
 
@@ -49,59 +49,40 @@ int gcd(int a, int b) {
   return b == 0 ? a : gcd(b, a % b);
 }
 
-struct SegmentTree {
-  vector<int> tree, lazy;
+struct Fenwick {
+  vector<int> bit;
   int n;
 
-  SegmentTree(int size) {
-    n = size;
-    tree.assign(4 * n, 0);
-    lazy.assign(4 * n, 0);
+  Fenwick() {}
+
+  Fenwick(int n) {
+    this->n = n;
+    bit.assign(n + 1, 0);
   }
 
-  void push(int v, int tl, int tr) {
-    if (lazy[v] != 0) {
-      tree[v] += lazy[v] * (tr - tl + 1);
-      tree[v] %= kMod;
-      if (tl != tr) {
-        lazy[2 * v] += lazy[v];
-        lazy[2 * v] %= kMod;
-        lazy[2 * v + 1] += lazy[v];
-        lazy[2 * v + 1] %= kMod;
-      }
-      lazy[v] = 0;
+  void update(int pos, int val) {
+    int idx = pos;
+    while (idx <= n) {
+      bit[idx] = (bit[idx] + val + kMod) % kMod;
+      idx += (idx & (-idx));
     }
   }
 
-  void update(int v, int tl, int tr, int l, int r, int val) {
-    push(v, tl, tr);
-    if (l > r) return;
-    if (l == tl && r == tr) {
-      lazy[v] = (lazy[v] + val) % kMod;
-      push(v, tl, tr);
-      return;
+  int get_sum(int p) {
+    if (p <= 0) return 0;
+    int idx = p, ans = 0;
+    while (idx > 0) {
+      ans = (ans + bit[idx]) % kMod;
+      idx -= (idx & (-idx));
     }
-    int tm = (tl + tr) / 2;
-    update(2 * v, tl, tm, l, min(r, tm), val);
-    update(2 * v + 1, tm + 1, tr, max(l, tm + 1), r, val);
-    push(2 * v, tl, tm);
-    push(2 * v + 1, tm + 1, tr);
-    tree[v] = (tree[2 * v] + tree[2 * v + 1]) % kMod;
+    return ans;
   }
 
-  int query(int v, int tl, int tr, int l, int r) {
-    if (l > r) return 0;
-    push(v, tl, tr);
-    if (l == tl && r == tr) return tree[v];
-    int tm = (tl + tr) / 2;
-    int L = query(2 * v, tl, tm, l, min(r, tm));
-    int R = query(2 * v + 1, tm + 1, tr, max(l, tm + 1), r);
-    return (L + R) % kMod;
+  int query(int l, int r) {
+    int s1 = get_sum(r) % kMod;
+    int s2 = get_sum(l - 1);
+    return (s1 - s2 + kMod) % kMod;
   }
-
-  void update(int l, int r, int val) { update(1, 1, n, l, r, val); }
-
-  int query(int l, int r) { return query(1, 1, n, l, r); }
 };
 
 pii convert_to_frac(string& s) {
@@ -147,8 +128,8 @@ void solve() {
     b_div_a[i] = b_div_a[i - 1] * b_a % kMod;
   }
 
-  SegmentTree fwd(n);
-  SegmentTree rev(n);
+  Fenwick fwd(n);
+  Fenwick rev(n);
 
   while (q--) {
     char type;
@@ -156,23 +137,25 @@ void solve() {
     if (type == '+') {
       int x, pos;
       cin >> x >> pos;
+
       int val = x * a_div_b[pos] % kMod;
-      fwd.update(pos, pos, val);
+      fwd.update(pos, val);
 
       int rev_pos = n - pos + 1;
-      val = x * a_div_b[rev_pos] % kMod;
-      rev.update(rev_pos, rev_pos, val);
+      int rev_val = x * a_div_b[rev_pos] % kMod;
+      rev.update(rev_pos, rev_val);
     } else if (type == '-') {
       int x, pos;
       cin >> x >> pos;
+      
       int val = x * a_div_b[pos] % kMod;
       val = (-val + kMod) % kMod;
-      fwd.update(pos, pos, val);
+      fwd.update(pos, val);
 
       int rev_pos = n - pos + 1;
-      val = x * a_div_b[rev_pos] % kMod;
-      val = (-val + kMod) % kMod;
-      rev.update(rev_pos, rev_pos, val);
+      int rev_val = x * a_div_b[rev_pos] % kMod;
+      rev_val = (-rev_val + kMod) % kMod;
+      rev.update(rev_pos, rev_val);
     } else {
       int id;
       cin >> id;
