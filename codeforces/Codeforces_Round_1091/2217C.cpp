@@ -58,16 +58,8 @@ int solve() {
   if (g1 != 1 || g2 != 1) return 0;
 
   int g = __gcd(n, m);
-  if (g == 1) return 1;
-  if (n == m && n <= 2) return 1;
-  if (g == min(n, m)) return 1;
-  return 0;
-  // cerr << g;
+  return g <= 2;
 }
-
-// 0 a1 a2 a3
-// 0 b1
-// 0 0 -> a1 0 -> a1 b1 -> a1 0 -> a2 0 -> a2 b1 -> a3 b1 -> a3 0 -> 0 0 -> 0 1
 
 int32_t main() {
   ios_base::sync_with_stdio(false);
