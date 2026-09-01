@@ -35,6 +35,17 @@
 *.cph
 *.editorconfig
 
+# Local machine and agent tooling
+.DS_Store
+/.claude/
+/.codegraph/
+/.gitnexus/
+/AGENTS.md
+/CLAUDE.md
+
+# Local ICPC livestream tooling
+/icpc-stream/
+
 # Ignore Folder
 test
 algo
