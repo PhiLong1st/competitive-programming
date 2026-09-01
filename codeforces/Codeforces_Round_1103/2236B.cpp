@@ -1,6 +1,6 @@
 /*
  Code by: KoKoDuDu
- Created: 2026.04.13 21:41:17
+ Created: 2026.06.12 21:40:57
 */
 
 #include <bits/stdc++.h>
@@ -50,21 +50,23 @@ int gcd(int a, int b) {
 }
 
 void solve() {
-  int n;
-  cin >> n;
+  int n, k;
+  cin >> n >> k;
 
-  vector<int> a(n);
-  for (int& c : a) cin >> c;
+  string s;
+  cin >> s;
 
-  sort(a.begin(), a.end(), greater<>());
-  for (int i = 1; i < n; ++i) {
-    if (a[i] == a[i - 1]) {
-      cout << -1 << '\n';
-      return;
-    }
+  for (int i = 0; i < n - k; ++i) {
+    if (s[i] == '0') continue;
+
+    s[i] = '0';
+    s[i + k] = s[i + k] == '1' ? '0' : '1';
   }
-  for (int& c : a) cout << c << ' ';
-  cout << '\n';
+
+  for (int i = 0; i < n; ++i) {
+    if (s[i] == '1') return void(cout << "NO\n");
+  }
+  cout << "YES\n";
 }
 
 int32_t main() {
