@@ -49,3 +49,6 @@
 # Ignore Folder
 test
 algo
+
+
+*.bin
