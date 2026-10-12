@@ -21,17 +21,14 @@ const int MOD = 1e9 + 7;
 
 int a[4] = {2, 3, 5, 7};
 
-// exponent of 2, 3, 5, 7 contributed by each digit
 int e[10][4] = {{0, 0, 0, 0}, {0, 0, 0, 0}, {1, 0, 0, 0}, {0, 1, 0, 0},
                 {2, 0, 0, 0}, {0, 0, 1, 0}, {1, 1, 0, 0}, {0, 0, 0, 1},
                 {3, 0, 0, 0}, {0, 2, 0, 0}};
 
-int cnt[4];  // exponent of 2, 3, 5, 7 in k
-bool bad;    // k has a prime factor > 7 -> only numbers containing 0 work
+int cnt[4];
+bool bad;
 int pw10[30];
 
-// sz mode(0: not started, 1: started w/o 0, 2: has 0) s2 s3 s5 s7
-// only memoized when state == 1 (free), s2..s7 are capped at cnt
 vector<int> f;
 vector<int> num;
 
@@ -44,16 +41,14 @@ int id(int sz, int mode, int s2, int s3, int s5, int s7) {
   return r;
 }
 
-int calc_f(int sz, int state, bool has0, bool hasDif0, int s2, int s3, int s5,
-           int s7) {
+int calc_f(int sz, int state, bool has0, bool hasDif0, int s2, int s3, int s5, int s7) {
   if (sz == sz(num)) {
     bool ok = s2 == cnt[0] && s3 == cnt[1] && s5 == cnt[2] && s7 == cnt[3];
     return hasDif0 && (has0 || (ok && !bad));
   }
 
-  int mode = hasDif0 + has0;  // has0 implies hasDif0
+  int mode = hasDif0 + has0;
 
-  // already contains a 0 and is free: every suffix is fine
   if (state && has0) return pw10[sz(num) - sz];
 
   int key = id(sz, mode, s2, s3, s5, s7);
@@ -81,7 +76,6 @@ int calc_f(int sz, int state, bool has0, bool hasDif0, int s2, int s3, int s5,
 }
 
 int calc(string x) {
-  // strip leading zeros
   int p = 0;
   while (p < sz(x) && x[p] == '0') ++p;
   x = x.substr(p);
@@ -91,14 +85,12 @@ int calc(string x) {
   num.clear();
   for (char ch : x) num.push_back(ch - '0');
 
-  f.assign((sz(num) + 1) * 3 * (cnt[0] + 1) * (cnt[1] + 1) * (cnt[2] + 1) *
-               (cnt[3] + 1),
-           -1);
+  int sz = (sz(num) + 1) * 3 * (cnt[0] + 1) * (cnt[1] + 1) * (cnt[2] + 1) * (cnt[3] + 1);
+  f.assign(sz, -1);
 
   return calc_f(0, 0, 0, 0, 0, 0, 0, 0);
 }
 
-// x - 1 on a decimal string (x >= 1)
 string dec(string x) {
   int i = sz(x) - 1;
   while (x[i] == '0') x[i--] = '9';
@@ -117,12 +109,12 @@ void solve() {
       cnt[i]++;
     }
   }
+
   bad = k != 1;
 
   pw10[0] = 1;
   for (int i = 1; i < 30; ++i) pw10[i] = pw10[i - 1] * 10 % MOD;
 
-  // dbg(cnt);
   cout << ((calc(r) - calc(dec(l))) % MOD + MOD) % MOD;
 }
 
